@@ -19,25 +19,50 @@ public function add_to_cart(Product $product, Request $request)
 {
     $user_id = Auth::id();
     $product_id = $product->id;
-    $cart = Cart::where('user_id', $user_id)->where('product_id', $product_id)->first();
 
-    if (!$cart) {
-        // Create a new cart if not exists
+    $existing_cart = Cart::where('product_id', $product->id)->where('user_id', $user_id)->first();
+
+    if ($existing_cart == null) {
+        $request->validate([
+            'amount' => 'required|gte:1|lte:' . $product->stock
+        ]);
+    
         $cart = Cart::create([
             'user_id' => $user_id,
             'product_id' => $product_id,
             'amount' => $request->amount
         ]);
-    } else {
-        // Update existing cart
-        $cart->update([
-            'amount' => $cart->amount + $request->amount
+    }
+    else {
+        $request->validate([
+            'amount' => 'required|gte:1|lte:' . ($product->stock - $existing_cart->amount)
+        ]);
+
+        $existing_cart->update([
+            'amount' => $existing_cart->amount + $request->amount
         ]);
     }
 
-    return Redirect::route('index_product');
-}
+    // $user_id = Auth::id();
+    // $product_id = $product->id;
+    // $cart = Cart::where('user_id', $user_id)->where('product_id', $product_id)->first();
 
+    // if (!$cart) {
+    //     // Create a new cart if not exists
+    //     $cart = Cart::create([
+    //         'user_id' => $user_id,
+    //         'product_id' => $product_id,
+    //         'amount' => $request->amount
+    //     ]);
+    // } else {
+    //     // Update existing cart
+    //     $cart->update([
+    //         'amount' => $cart->amount + $request->amount
+    //     ]);
+    // }
+
+    return Redirect::route('show_cart');
+}
 
     public function show_cart()
     {

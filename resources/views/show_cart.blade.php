@@ -13,7 +13,6 @@
 			@foreach ($errors->all() as $error)
 				<p>{{ $error }}</p>
 			@endforeach
-
 		@endif
 		@foreach ($carts as $cart)
 			<img src="{{ url('storage/' . $cart->product->image) }}" alt="" height="100px">
@@ -32,6 +31,10 @@
 			<button type="submit">Delete</button>
 			</form>
 		@endforeach
+		<form action="{{ route('checkout') }}" method="post">
+			@csrf
+			<button type="submit">Checkout</button>
+		</form>
 	</body>
 
 </html>

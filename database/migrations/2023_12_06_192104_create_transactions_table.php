@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_orders', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->integer('amount');
             $table->foreignId('product_id')->constrained('products')->cascadOnUpdate()->cascadOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadOnUpdate()->cascadOnDelete();
+            $table->foreignId('order_id')->constrained('orders')->cascadOnUpdate()->cascadOnDelete();
             $table->timestamps();
         });
     }
