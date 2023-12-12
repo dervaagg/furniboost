@@ -59,11 +59,17 @@
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+									@if (Auth::user()->is_admin)
+									<a class="dropdown-item" href="{{ route('create_product') }}">
+										Add Product
+									</a>
+									@else
 									<a class="dropdown-item" href="{{ route('show_cart') }}">
 										Cart
 									</a>
-									<a class="dropdown-item" href="{{ route('create_product') }}">
-										Add Product
+									@endif
+									<a class="dropdown-item" href="{{ route('index_product') }}">
+										All Product
 									</a>
 									<a class="dropdown-item" href="{{ route('index_order') }}">
 										Order
